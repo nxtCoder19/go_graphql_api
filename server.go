@@ -1,6 +1,9 @@
 package main
 
 import (
+	"context"
+	"github.com/nxtcoder19/go_graphql_api/package/mongo"
+	graphql_db "github.com/nxtcoder19/go_graphql_api/src/graphql/domain"
 	"log"
 	"net/http"
 	"os"
@@ -17,6 +20,20 @@ func main() {
 	if port == "" {
 		port = defaultPort
 	}
+
+	mongoUrl := os.Getenv("MONGO_URI")
+	db := mongo.NewDB("xyz", mongoUrl)
+	err := db.ConnectDB(context.TODO())
+	if err != nil {
+		panic(err)
+	}
+
+	graphql := graphql_db.NewGraphQl(db)
+	err = graphql.Init(context.TODO())
+	if err != nil {
+		panic(err)
+	}
+	graphql.CreateLink(context.TODO(), "ppp", "qqq")
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 

@@ -7,13 +7,40 @@ package graph
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/nxtcoder19/go_graphql_api/graph/model"
+	"github.com/nxtcoder19/go_graphql_api/package/mongo"
+	graphql_db "github.com/nxtcoder19/go_graphql_api/src/graphql/domain"
 )
 
 // CreateLink is the resolver for the createLink field.
 func (r *mutationResolver) CreateLink(ctx context.Context, input model.NewLink) (*model.Link, error) {
-	panic(fmt.Errorf("not implemented: CreateLink - createLink"))
+	db.ConnectDB(context.TODO())
+	link := model.Link{
+		Title:   input.Title,
+		Address: input.Address,
+		//User: &model.User{
+		//	Name: "test",
+		//},
+	}
+
+	// Call the CreateLink method with the new link
+	createdLink := graphql_d.CreateLink(ctx, link.Title, link.Address)
+	if createdLink == nil {
+		return nil, fmt.Errorf("Failed to create link")
+	}
+
+	return createdLink, nil
+	//panic(fmt.Errorf("not implemented: CreateLink - createLink"))
+	//var link model.Link
+	//var user model.User
+	////link.Address = input.Address
+	////link.Title = input.Title
+	//user.Name = "test"
+	//link.User = &user
+	////return &link, nil
+	//return graphql_d.CreateLink(ctx, input.Title, input.Address, *link.User), nil
 }
 
 // CreateUser is the resolver for the createUser field.
@@ -38,9 +65,9 @@ func (r *queryResolver) Links(ctx context.Context) ([]*model.Link, error) {
 	dummyLink := model.Link{
 		Title:   "our dummy link",
 		Address: "https://google.com",
-		User: &model.User{
-			Name: "admin",
-		},
+		//User: &model.User{
+		//	Name: "admin",
+		//},
 	}
 	links = append(links, &dummyLink)
 
@@ -55,3 +82,13 @@ func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+var mongoUrl = os.Getenv("MONGO_URI")
+var db = mongo.NewDB("xyz", mongoUrl)
+var graphql_d = graphql_db.NewGraphQl(db)
