@@ -14,4 +14,10 @@
     use db_name
     show collections
     db.link.deleteMany({})
+
+## References
+
+[Reference link](https://github.com/AkhilSharma90/GO-GraphQL-MongoDB-CRUD-Project/)
+
+[gqlgen](https://www.howtographql.com/graphql-go/5-create-and-retrieve-links/)
     
