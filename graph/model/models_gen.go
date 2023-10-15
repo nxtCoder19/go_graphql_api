@@ -6,6 +6,7 @@ type Link struct {
 	ID      string `json:"id"`
 	Title   string `json:"title"`
 	Address string `json:"address"`
+	User    *User  `json:"user"`
 }
 
 type Login struct {
@@ -18,9 +19,20 @@ type NewLink struct {
 	Address string `json:"address"`
 }
 
+type NewPost struct {
+	Title   string `json:"Title"`
+	Content string `json:"Content"`
+}
+
 type NewUser struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+type Post struct {
+	ID      string `json:"id"`
+	Title   string `json:"Title"`
+	Content string `json:"Content"`
 }
 
 type RefreshTokenInput struct {

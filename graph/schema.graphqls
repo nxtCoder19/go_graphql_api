@@ -2,7 +2,7 @@ type Link {
   id: ID!
   title: String!
   address: String!
-#  user: User!
+  user: User!
 }
 
 type User {
@@ -10,8 +10,21 @@ type User {
   name: String!
 }
 
+type Post {
+  id: ID!
+  Title: String!
+  Content: String!
+}
+
 type Query {
   links: [Link!]!
+  GetAllPosts: [Post!]!
+  GetOnePost(id: String!): Post!
+}
+
+input NewPost {
+  Title: String!
+  Content: String!
 }
 
 input NewLink {
@@ -35,9 +48,9 @@ input Login {
 
 type Mutation {
   createLink(input: NewLink!): Link!
-  createUser(input: NewUser!): String!
+  createPost(input: NewPost): Post!
+  createUser(input: NewUser!): User
   login(input: Login!): String!
-  # we'll talk about this in authentication section
   refreshToken(input: RefreshTokenInput!): String!
 }
 

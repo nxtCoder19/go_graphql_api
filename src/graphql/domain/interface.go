@@ -22,5 +22,9 @@ type Link struct {
 
 type GraphqlDb interface {
 	Init(ctx context.Context) error
-	CreateLink(ctx context.Context, title string, address string) *model.Link
+	CreateLink(ctx context.Context, title string, address string, user model.User) *model.Link
+	GetLinks(ctx context.Context) []*model.Link
+	CreatePost(ctx context.Context, title string, content string) *model.Post
+	GetPosts(ctx context.Context) []*model.Post
+	GetPost(ctx context.Context, id string) *model.Post
 }

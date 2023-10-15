@@ -16,35 +16,40 @@ import (
 
 // CreateLink is the resolver for the createLink field.
 func (r *mutationResolver) CreateLink(ctx context.Context, input model.NewLink) (*model.Link, error) {
-	db.ConnectDB(context.TODO())
+	//db.ConnectDB(context.TODO())
 	link := model.Link{
 		Title:   input.Title,
 		Address: input.Address,
-		//User: &model.User{
-		//	Name: "test",
-		//},
+		User: &model.User{
+			Name: "test",
+		},
 	}
 
 	// Call the CreateLink method with the new link
-	createdLink := graphql_d.CreateLink(ctx, link.Title, link.Address)
+	createdLink := graphql_d.CreateLink(ctx, link.Title, link.Address, *link.User)
 	if createdLink == nil {
 		return nil, fmt.Errorf("Failed to create link")
 	}
 
 	return createdLink, nil
-	//panic(fmt.Errorf("not implemented: CreateLink - createLink"))
-	//var link model.Link
-	//var user model.User
-	////link.Address = input.Address
-	////link.Title = input.Title
-	//user.Name = "test"
-	//link.User = &user
-	////return &link, nil
-	//return graphql_d.CreateLink(ctx, input.Title, input.Address, *link.User), nil
+}
+
+// CreatePost is the resolver for the createPost field.
+func (r *mutationResolver) CreatePost(ctx context.Context, input *model.NewPost) (*model.Post, error) {
+	//panic(fmt.Errorf("not implemented: CreatePost - createPost"))
+	post := model.Post{
+		Title:   input.Title,
+		Content: input.Content,
+	}
+	createdPost := graphql_d.CreatePost(ctx, post.Title, post.Content)
+	if createdPost == nil {
+		return nil, fmt.Errorf("Failed to create post")
+	}
+	return createdPost, nil
 }
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (string, error) {
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
 	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
 }
 
@@ -60,18 +65,24 @@ func (r *mutationResolver) RefreshToken(ctx context.Context, input model.Refresh
 
 // Links is the resolver for the links field.
 func (r *queryResolver) Links(ctx context.Context) ([]*model.Link, error) {
-	//panic(fmt.Errorf("not implemented: Links - links"))
-	var links []*model.Link
-	dummyLink := model.Link{
-		Title:   "our dummy link",
-		Address: "https://google.com",
-		//User: &model.User{
-		//	Name: "admin",
-		//},
-	}
-	links = append(links, &dummyLink)
+	links := graphql_d.GetLinks(ctx)
 
 	return links, nil
+}
+
+// GetAllPosts is the resolver for the GetAllPosts field.
+func (r *queryResolver) GetAllPosts(ctx context.Context) ([]*model.Post, error) {
+	//panic(fmt.Errorf("not implemented: GetAllPosts - GetAllPosts"))
+	posts := graphql_d.GetPosts(ctx)
+	return posts, nil
+}
+
+// GetOnePost is the resolver for the GetOnePost field.
+func (r *queryResolver) GetOnePost(ctx context.Context, id string) (*model.Post, error) {
+	//panic(fmt.Errorf("not implemented: GetOnePost - GetOnePost"))
+	fmt.Println("aa", id)
+	post := graphql_d.GetPost(ctx, id)
+	return post, nil
 }
 
 // Mutation returns MutationResolver implementation.
@@ -92,3 +103,4 @@ type queryResolver struct{ *Resolver }
 var mongoUrl = os.Getenv("MONGO_URI")
 var db = mongo.NewDB("xyz", mongoUrl)
 var graphql_d = graphql_db.NewGraphQl(db)
+var connected = db.ConnectDB(context.TODO())

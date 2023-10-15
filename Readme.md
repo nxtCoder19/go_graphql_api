@@ -13,4 +13,5 @@
     show dbs;
     use db_name
     show collections
+    db.link.deleteMany({})
     

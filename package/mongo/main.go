@@ -78,7 +78,7 @@ func (d *DB) GetCount(ctx context.Context, collectionName string, filter interfa
 }
 
 func (d *DB) GetByID(ctx context.Context, collectionName string, id interface{}, result interface{}) error {
-	filter := bson.M{"_id": id}
+	filter := bson.M{"id": id}
 	err := d.client.Database(d.database).Collection(collectionName).FindOne(ctx, filter).Decode(result)
 	return err
 }

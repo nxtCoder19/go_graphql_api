@@ -33,7 +33,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	graphql.CreateLink(context.TODO(), "ppp", "qqq")
+	//graphql.CreateLink(context.TODO(), "ppp", "qqq")
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
